@@ -15,6 +15,18 @@ class Board extends React.Component {
 		this.nextId = this.nextId.bind(this)
 	}
 
+	componentWillMount() {
+		var self = this
+		if (this.props.count) {
+			fetch(`https://baconipsum.com/api/?type=all-meat&sentences=${this.props.count}`)
+				.then(response => response.json())
+				.then(json => json[0]
+								.split('. ')
+								.forEach(sentence => self
+								.add(sentence.substring(0, 25))))
+		}
+	}
+
 	add(text) {
 		this.setState(prevState => ({
 			notes: [
@@ -44,7 +56,7 @@ class Board extends React.Component {
 	remove(id) {
 		console.log('removing item at', id)
 		this.setState(prevState => ({
-			notes: prevState.notes.filter(note => note.id != id)
+			notes: prevState.notes.filter(note => note.id !== id)
 		}))
 	}
 
